@@ -1,6 +1,6 @@
 use std::io;
 
-use actix_cors::Cors;
+// use actix_cors::Cors;
 use actix_easy_multipart::{
     tempfile::Tempfile, text::Text, MultipartForm, MultipartForm as FromMultipart,
 };
@@ -77,21 +77,21 @@ async fn manual_hello() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
-        let cors = {
-            #[cfg(debug_assertions)]
-            {
-                Cors::permissive()
-            }
-            #[cfg(not(debug_assertions))]
-            {
-                Cors::default()
-                    .allowed_origin_fn(|origin, _| origin.as_bytes().ends_with(b"rodeonow.com"))
-                    .allowed_methods(["GET", "POST"])
-            }
-        };
+        // let cors = {
+        //     #[cfg(debug_assertions)]
+        //     {
+        //         Cors::permissive()
+        //     }
+        //     #[cfg(not(debug_assertions))]
+        //     {
+        //         Cors::default()
+        //             .allowed_origin_fn(|origin, _| origin.as_bytes().ends_with(b"rodeonow.com"))
+        //             .allowed_methods(["GET", "POST"])
+        //     }
+        // };
+        // .wrap(cors)
 
         App::new()
-            .wrap(cors)
             .service(index)
             .route("/test", web::get().to(manual_hello))
     })
