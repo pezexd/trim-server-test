@@ -5,7 +5,7 @@ use actix_easy_multipart::{
     tempfile::Tempfile, text::Text, MultipartForm, MultipartForm as FromMultipart,
 };
 use actix_files::NamedFile;
-use actix_web::{post, App, HttpServer};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
 #[derive(Debug, FromMultipart)]
 struct Upload {
@@ -65,6 +65,15 @@ async fn index(upload: MultipartForm<Upload>) -> io::Result<NamedFile> {
     Ok(t_file)
 }
 
+#[get("/")]
+async fn hello() -> impl Responder {
+    HttpResponse::Ok().body("Hello world!")
+}
+
+async fn manual_hello() -> impl Responder {
+    HttpResponse::Ok().body("Hey there!")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -81,9 +90,12 @@ async fn main() -> std::io::Result<()> {
             }
         };
 
-        App::new().wrap(cors).service(index)
+        App::new()
+            .wrap(cors)
+            .service(index)
+            .route("/test", web::get().to(manual_hello))
     })
-    .bind(("127.0.0.1", 3000))?
+    .bind(("0.0.0.0", 3000))?
     .run()
     .await
 }
