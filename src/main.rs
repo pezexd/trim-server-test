@@ -16,7 +16,6 @@ struct Upload {
 
 #[post("/")]
 async fn index(upload: MultipartForm<Upload>) -> io::Result<NamedFile> {
-    HttpResponse::Ok().body("Hey there!");
     let Upload { start, end, file } = upload.0;
 
     // setup command
