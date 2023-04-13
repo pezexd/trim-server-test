@@ -91,11 +91,9 @@ async fn main() -> std::io::Result<()> {
         // };
         // .wrap(cors)
 
-        App::new()
-            .service(index)
-            .route("/test", web::get().to(manual_hello))
+        App::new().route("/", web::get().to(manual_hello))
     })
-    .bind(("0.0.0.0", 3000))?
+    .bind("0.0.0.0:8088")?
     .run()
     .await
 }
